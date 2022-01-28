@@ -1,7 +1,7 @@
 package mc.pewdiepie.applybadgepermissions.listeners;
 
 import mc.pewdiepie.applybadgepermissions.ApplyBadgePermissions;
-import net.milkbowl.vault.permission.Permission;
+import mc.pewdiepie.applybadgepermissions.managers.PermissionsManager;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,10 +19,11 @@ public class PlayerJoinEventListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
 
+        String permission = CONFIG.getString("Joined.permissionNode");
         Player player = event.getPlayer();
+
         if (!player.hasPlayedBefore()) {
-            Permission perm = ApplyBadgePermissions.getPermissions();
-            perm.playerAdd(null, player, CONFIG.getString("Joined"));
+            PermissionsManager.addPermission(player, permission);
         }
     }
 }

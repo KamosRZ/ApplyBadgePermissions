@@ -10,12 +10,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class ApplyBadgePermissions extends JavaPlugin {
 
     private static Permission perms = null;
+    private static boolean hasLuckPerms = false;
+
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
 
         registerListeners();
         setupPermissions();
+
+        checkSoftDependencies();
     }
 
     @Override
@@ -30,13 +34,29 @@ public final class ApplyBadgePermissions extends JavaPlugin {
     }
 
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new PlayerJoinEventListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerAdvancementDoneEventListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerDeathEventListener(this), this);
 
+        //Enabled checks are per advancement inside the Class
+        getServer().getPluginManager().registerEvents(new PlayerAdvancementDoneEventListener(this), this);
+
+        if (getConfig().getBoolean("Joined.enabled")) {
+            getServer().getPluginManager().registerEvents(new PlayerJoinEventListener(this), this);
+        }
+
+        if (getConfig().getBoolean("Died.enabled")) {
+            getServer().getPluginManager().registerEvents(new PlayerDeathEventListener(this), this);
+        }
+
+    }
+
+    private void checkSoftDependencies() {
+        hasLuckPerms = (getServer().getPluginManager().getPlugin("LuckPerms") != null);
     }
 
     public static Permission getPermissions() {
         return perms;
+    }
+
+    public static boolean usingLuckPerms() {
+        return hasLuckPerms;
     }
 }

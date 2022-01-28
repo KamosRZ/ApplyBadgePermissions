@@ -4,12 +4,22 @@
 #
 
 #Players get this badge when they join the server once
-Joined: pewbadges.hardcore.first.joined
+Joined:
+  enabled: true
+  permissionNode: pewbadges.hardcore.first.joined
 #Players get this badge when they complete one advancement
-Played: pewbadges.hardcore.first.played
+Played:
+  enabled: true
+  permissionNode: pewbadges.hardcore.first.played
 #Players get this badge when they complete the "Free The End" advancement (Kill the Dragon)
-DragonSlayer: pewbadges.hardcore.first.dragonslayer
+DragonSlayer:
+  enabled: true
+  permissionNode: pewbadges.hardcore.first.dragonslayer
 #Players get this permission when they die for the first time
-Died: pewbadges.hardcore.first.died
+Died:
+  enabled: true
+  permissionNode: pewbadges.hardcore.first.died
 #Players get this permission when they complete the "The Next Generation" advancement (Hold the dragon egg)
-HeldEgg: pewbadges.hardcore.first.heldegg
+HeldEgg:
+  enabled: true
+  permissionNode: pewbadges.hardcore.first.heldegg
