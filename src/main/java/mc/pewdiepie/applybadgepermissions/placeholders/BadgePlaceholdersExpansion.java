@@ -71,7 +71,7 @@ public class BadgePlaceholdersExpansion extends PlaceholderExpansion  {
             return Boolean.FALSE.toString();
 
         }
-        
+
         return null; // Placeholder is unknown by the Expansion
     }
 }
