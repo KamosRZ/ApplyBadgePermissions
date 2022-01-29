@@ -3,6 +3,7 @@ package mc.pewdiepie.applybadgepermissions;
 import mc.pewdiepie.applybadgepermissions.listeners.PlayerAdvancementDoneEventListener;
 import mc.pewdiepie.applybadgepermissions.listeners.PlayerDeathEventListener;
 import mc.pewdiepie.applybadgepermissions.listeners.PlayerJoinEventListener;
+import mc.pewdiepie.applybadgepermissions.placeholders.BadgePlaceholdersExpansion;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,15 +12,18 @@ public final class ApplyBadgePermissions extends JavaPlugin {
 
     private static Permission perms = null;
     private static boolean hasLuckPerms = false;
+    private static boolean hasPlaceholderAPI = false;
 
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
+        checkSoftDependencies();
 
         registerListeners();
         setupPermissions();
+        registerPlaceholders();
 
-        checkSoftDependencies();
+
     }
 
     @Override
@@ -48,8 +52,15 @@ public final class ApplyBadgePermissions extends JavaPlugin {
 
     }
 
+    private void registerPlaceholders() {
+        if (hasPlaceholderAPI) {
+            new BadgePlaceholdersExpansion(this).register();
+        }
+    }
+
     private void checkSoftDependencies() {
         hasLuckPerms = (getServer().getPluginManager().getPlugin("LuckPerms") != null);
+        hasPlaceholderAPI = (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null);
     }
 
     public static Permission getPermissions() {

@@ -3,7 +3,9 @@ version: ${project.version}
 main: mc.pewdiepie.applybadgepermissions.ApplyBadgePermissions
 api-version: 1.17
 depend: [ Vault ]
-softdepend: [ LuckPerms ]
+softdepend:
+  - LuckPerms
+  - PlaceholderAPI
 authors: [ KamosRZ ]
 description: This plugin listens for certain events and applies permissions when conditions for various badges are met.
 permissions:

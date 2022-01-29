@@ -1,6 +1,7 @@
 package mc.pewdiepie.applybadgepermissions.managers;
 
 import mc.pewdiepie.applybadgepermissions.ApplyBadgePermissions;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class PermissionsManager {
@@ -12,5 +13,18 @@ public class PermissionsManager {
             VaultPermissionsManager.addPermission(player, permission);
         }
     }
+
+    public static void addTempPermission(Player player, String permission, long minutes) {
+        if (ApplyBadgePermissions.usingLuckPerms()) {
+            LuckPermsPermissionsManager.addPermission(player, permission, minutes);
+        }
+
+        //Vault does not support temporary permissions?
+    }
+
+    public static boolean checkOfflinePlayerPermission(OfflinePlayer offlinePlayer, String permission) {
+        return VaultPermissionsManager.hasPermission(offlinePlayer, permission);
+    }
+
 
 }
