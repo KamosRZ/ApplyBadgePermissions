@@ -14,14 +14,6 @@ public class PermissionsManager {
         }
     }
 
-    public static void addTempPermission(Player player, String permission, long minutes) {
-        if (ApplyBadgePermissions.usingLuckPerms()) {
-            LuckPermsPermissionsManager.addPermission(player, permission, minutes);
-        }
-
-        //Vault does not support temporary permissions?
-    }
-
     public static boolean checkOfflinePlayerPermission(OfflinePlayer offlinePlayer, String permission) {
         return VaultPermissionsManager.hasPermission(offlinePlayer, permission);
     }

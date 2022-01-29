@@ -1,10 +1,12 @@
 package mc.pewdiepie.applybadgepermissions;
 
+import mc.pewdiepie.applybadgepermissions.cache.OfflinePlayersCache;
 import mc.pewdiepie.applybadgepermissions.listeners.PlayerAdvancementDoneEventListener;
 import mc.pewdiepie.applybadgepermissions.listeners.PlayerDeathEventListener;
 import mc.pewdiepie.applybadgepermissions.listeners.PlayerJoinEventListener;
 import mc.pewdiepie.applybadgepermissions.placeholders.BadgePlaceholdersExpansion;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,6 +24,8 @@ public final class ApplyBadgePermissions extends JavaPlugin {
         registerListeners();
         setupPermissions();
         registerPlaceholders();
+
+        loadOfflinePlayersCache();
 
 
     }
@@ -56,6 +60,14 @@ public final class ApplyBadgePermissions extends JavaPlugin {
         if (hasPlaceholderAPI) {
             new BadgePlaceholdersExpansion(this).register();
         }
+    }
+
+    private void loadOfflinePlayersCache() {
+        OfflinePlayersCache.instantiateOfflinePlayersCache();
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this,
+                OfflinePlayersCache::clearOfflinePlayersCache, 0L, 432000L);
+
     }
 
     private void checkSoftDependencies() {

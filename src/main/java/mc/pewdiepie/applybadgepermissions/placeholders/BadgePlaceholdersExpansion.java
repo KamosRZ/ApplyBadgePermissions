@@ -1,11 +1,13 @@
 package mc.pewdiepie.applybadgepermissions.placeholders;
 
 import mc.pewdiepie.applybadgepermissions.ApplyBadgePermissions;
+import mc.pewdiepie.applybadgepermissions.cache.OfflinePlayersCache;
 import mc.pewdiepie.applybadgepermissions.managers.PermissionsManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class BadgePlaceholdersExpansion extends PlaceholderExpansion  {
 
@@ -16,17 +18,17 @@ public class BadgePlaceholdersExpansion extends PlaceholderExpansion  {
     }
 
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return "KamosRZ";
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "pewbadges";
     }
 
     @Override
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return "1.0.0";
     }
 
@@ -43,12 +45,12 @@ public class BadgePlaceholdersExpansion extends PlaceholderExpansion  {
         Player player = offlinePlayer.getPlayer();
 
         if (player == null) {
-            return null;
+            return Boolean.FALSE.toString();
         }
 
         if(splitParams[0].equalsIgnoreCase(hasPermissionPlaceholder)){
 
-            if (splitParams[2].isEmpty()) {
+            if (splitParams.length == 2) {
                 if (player.hasPermission(splitParams[1])) {
                     return Boolean.TRUE.toString();
                 } else {
@@ -56,14 +58,19 @@ public class BadgePlaceholdersExpansion extends PlaceholderExpansion  {
                 }
             }
 
-            String viewingPermission = splitParams[1] + "." + splitParams[2];
-            if (player.hasPermission(viewingPermission)) {
+            //String viewingPermission = splitParams[1] + "." + splitParams[2];
+            OfflinePlayer viewedOfflinePlayer = Bukkit.getOfflinePlayerIfCached(splitParams[2]);
+            if (viewedOfflinePlayer == null) {
+                return Boolean.FALSE.toString();
+            }
+
+            if (OfflinePlayersCache.containsOfflinePlayerPermissionPair(viewedOfflinePlayer, splitParams[1])) {
                 return Boolean.TRUE.toString();
             } else {
                 Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                    OfflinePlayer viewedOfflinePlayer = Bukkit.getOfflinePlayerIfCached(splitParams[2]);
+
                     if (PermissionsManager.checkOfflinePlayerPermission(viewedOfflinePlayer, splitParams[1])) {
-                        PermissionsManager.addTempPermission(player, viewingPermission, 3);
+                        OfflinePlayersCache.addToOfflinePlayersCache(viewedOfflinePlayer, splitParams[1]);
                     }
                 });
             }
