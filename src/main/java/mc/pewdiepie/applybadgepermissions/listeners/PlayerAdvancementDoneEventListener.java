@@ -69,6 +69,12 @@ public class PlayerAdvancementDoneEventListener implements Listener {
 
     }
 
+    /**
+     * Since advancements are now fired for many milestones (including unlocking recipes), this method checks if
+     * the advancement that fired this current event is on of the major categories that players see as "advancements".
+     * @param advancement = contains the data string of the current advancement.
+     * @return = true if it is a major advancement, false if not.
+     */
     private boolean checkIfMajorAdvancement(String advancement) {
         String[] majorAdvancementCategories = {"minecraft:story/", "minecraft:nether/", "minecraft:end/",
                 "minecraft:adventure/", "minecraft:husbandry/"};

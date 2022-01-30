@@ -8,10 +8,6 @@ public class OfflinePlayersCache {
 
     private static HashSet<String> offlinePlayersCache;
 
-   /* public OfflinePlayersCache() {
-        offlinePlayersCache = new HashSet<>();
-    } */
-
     public static void instantiateOfflinePlayersCache() {
         offlinePlayersCache = new HashSet<>();
     }

@@ -26,8 +26,6 @@ public final class ApplyBadgePermissions extends JavaPlugin {
         registerPlaceholders();
 
         loadOfflinePlayersCache();
-
-
     }
 
     @Override
@@ -35,12 +33,17 @@ public final class ApplyBadgePermissions extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    private boolean setupPermissions() {
+    /**
+     * Loads the Vault permissions module. Throws an error if Vault is not installed.
+     */
+    private void setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
-        return perms != null;
     }
 
+    /**
+     * Register the Bukkit API listeners. Checks for enabled config options for some of the badges.
+     */
     private void registerListeners() {
 
         //Enabled checks are per advancement inside the Class
@@ -56,29 +59,47 @@ public final class ApplyBadgePermissions extends JavaPlugin {
 
     }
 
+    /**
+     * Registers a PlaceHolderAPI expansion if it's installed.
+     */
     private void registerPlaceholders() {
         if (hasPlaceholderAPI) {
             new BadgePlaceholdersExpansion(this).register();
         }
     }
 
+    /**
+     * Instantiates a player cache used to store player permissions. It's used because Offline players permission check
+     * is not safe to perform on the main thread, so it's done Async and saved in the cache for main thread use. This
+     * method also registers a repeating task that clears the cache.
+     */
     private void loadOfflinePlayersCache() {
         OfflinePlayersCache.instantiateOfflinePlayersCache();
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this,
                 OfflinePlayersCache::clearOfflinePlayersCache, 0L, 432000L);
-
     }
 
+    /**
+     * Checks if plugins used for some features are installed on the server.
+     */
     private void checkSoftDependencies() {
         hasLuckPerms = (getServer().getPluginManager().getPlugin("LuckPerms") != null);
         hasPlaceholderAPI = (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null);
     }
 
+    /**
+     * Provides access to Vault's permissions module.
+     * @return = Vault's permission module.
+     */
     public static Permission getPermissions() {
         return perms;
     }
 
+    /**
+     * Returns true if LuckPerms is installed on the server.
+     * @return = true if LP is installed, false if not.
+     */
     public static boolean usingLuckPerms() {
         return hasLuckPerms;
     }
